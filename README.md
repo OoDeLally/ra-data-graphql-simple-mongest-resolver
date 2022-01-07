@@ -61,3 +61,4 @@ export class CatsService extends MongestService(Cat) {
 
 * Find what to export from mongest-service.
 * Tests.
+* Args options to make some field optional

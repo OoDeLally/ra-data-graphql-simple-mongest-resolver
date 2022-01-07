@@ -7,6 +7,12 @@ const CatsResolverOptions: MongestRaResolverOptions<Cat> = {
   virtualFields: {
     fancyName: { dependsOn: ['name'] },
   },
+  discriminatorRequiredExtraFields: ['age'],
+  endpoints: {
+    create: {
+      enable: false,
+    },
+  },
 };
 
 @Resolver(() => Cat)

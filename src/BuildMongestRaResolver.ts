@@ -40,17 +40,22 @@ import { RaPaginationArgs, raPaginationArgsToPaginationArgs } from './RaPaginati
 import { ListMetadata } from './ReactAdmin';
 
 interface ArgsOptions {
+  // Omit field from the ArgsType payload.
   omitFields?: string[];
 }
 
-interface ResolverDefaultOptions {
+interface ResolverEndpointDefaultOptions {
+  // If this endpoint must be guarded (e.g. for authorization)
   guard?: ItemOrArray<NestGuardClassOrInstance>;
+  // If this endpoint must be intercepted
   interceptor?: ItemOrArray<NestInterceptor>;
+  // Set to `false` to disable the endpoint.
   enable?: boolean;
 }
 
 interface VirtualFieldOptions<T> {
   // Fields required to resolve the given virtual field, e.g. `_id` is usually needed to resolve `id`.
+  // Mongest will make sure they are included in the mongo projection.
   dependsOn?: (string & keyof T)[];
 }
 
@@ -59,24 +64,40 @@ export interface MongestRaResolverOptions<
   F extends CustomFilter | undefined = undefined,
   IdType = ObjectId,
 > {
+  // Provide a filter in the graphql query endpoints
   filter?: F extends undefined
     ? never
     : {
+        // Filter ObjectType class
         classRef: Type<F>;
+
+        // Function converting your Filter to a mongo filter
         filterBuilder: FilterBuilder<MongoDoc<T, IdType>, F extends undefined ? never : F>;
       };
+
+  // Virtual fields options e.g. @ResolveField(() => String)
   virtualFields?: Record<string, VirtualFieldOptions<MongoDoc<T>>>;
-  discriminatorRequiredFields?: (string & keyof MongoDoc<T>)[];
+
+  // Extra fields required for your graphql's resolveType().
+  // They will always be included in the mongo projection.
+  // Note: mongoose's discriminator is already implicitly added, you dont need to add it here.
+  discriminatorRequiredExtraFields?: (string & keyof MongoDoc<T>)[];
+
+  // Endpoint options.
   endpoints?: {
-    getOne?: ResolverDefaultOptions;
-    getMany?: ResolverDefaultOptions;
-    create?: ResolverDefaultOptions & {
-      args?: Type<EntityPayload> | ArgsOptions;
+    getOne?: ResolverEndpointDefaultOptions;
+    getMany?: ResolverEndpointDefaultOptions;
+    create?: ResolverEndpointDefaultOptions & {
+      args?:
+        | Type<EntityPayload> // Provide your own ArgsType graphql class
+        | ArgsOptions; // or let mongest generate it from your entity.
     };
-    update?: ResolverDefaultOptions & {
-      args?: Type<{ id: unknown } & EntityPayload> | ArgsOptions;
+    update?: ResolverEndpointDefaultOptions & {
+      args?:
+        | Type<{ id: unknown } & EntityPayload> // Provide your own ArgsType graphql class
+        | ArgsOptions; // or let mongest generate it from your entity.
     };
-    delete?: ResolverDefaultOptions;
+    delete?: ResolverEndpointDefaultOptions;
   };
 }
 
@@ -144,7 +165,7 @@ export function BuildMongestRaResolver<
     id: options?.virtualFields?.id || { dependsOn: ['_id'] }, // This resolver has a builting ResolveField for id, but it could be overriden.
   };
   const virtualFieldDeps = mapValues(virtualFieldOptions, (val) => val.dependsOn || []);
-  const discriminatorRequiredFields = options.discriminatorRequiredFields || [];
+  const discriminatorRequiredFields = options.discriminatorRequiredExtraFields || [];
 
   @ArgsType()
   abstract class GetManyArgs extends BuildGetManyArgs<T, F, IdType>(options.filter) {}
