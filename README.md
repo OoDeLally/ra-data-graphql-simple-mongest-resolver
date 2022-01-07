@@ -60,7 +60,7 @@ export class CatsResolver extends BuildMongestRaResolver(Cat) {
 
 ### Out-of-the-box GraphQL NestJS resolver CRUD endpoints.
 
-Just declare your entity, the service and the resolver will have automatic endpoints with the proper fields.
+Just declare your entity, the service and the resolver will have automatic endpoints with the appropriate fields.
 The generated endpoints are described in [ra-data-graphql-simple](https://github.com/marmelab/react-admin/tree/master/packages/ra-data-graphql-simple).
 
 
@@ -169,5 +169,3 @@ These resolvers are built on top of [Mongest Service](https://github.com/OoDeLal
 * Amazing discriminator-based polymorphism!
 * Precise and safe typing in and out for all mongoose functions (sensitive to projection!).
 * Fully overridable and expandable NestJS service.
-
-More info: [Mongest Service](https://github.com/OoDeLally/mongest-service)
