@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { MongoDoc } from 'src/types';
-import { HomeCat } from 'tests/home-cat-module/home-cat.entity';
+import { HomeCat } from '../home-cat-module/home-cat.entity';
 import { StrayCat } from '../stray-cat-module/stray-cat.entity';
 import { CatKind } from './cat.entity';
 

@@ -16,6 +16,7 @@
     "noUncheckedIndexedAccess": true
   },
   "paths": {
-    "src": "./src"
+    "src": "./src",
+    "test": "./tests"
   }
 }

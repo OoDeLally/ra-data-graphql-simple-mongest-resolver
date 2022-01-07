@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { registerEntityClassForSchema } from 'mongest-service';
-import { Cat } from 'tests/cat-module/cat.entity';
+import { Cat } from '../cat-module/cat.entity';
 
 @Schema()
 @ObjectType('HomeCat', { implements: Cat })

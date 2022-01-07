@@ -1,5 +1,5 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { HomeCat, HomeCatSchema } from 'tests/home-cat-module/home-cat.entity';
+import { HomeCat, HomeCatSchema } from '../home-cat-module/home-cat.entity';
 import { StrayCat, StrayCatSchema } from '../stray-cat-module/stray-cat.entity';
 import { Cat, CatSchema } from './cat.entity';
 

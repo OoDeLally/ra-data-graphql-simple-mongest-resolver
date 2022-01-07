@@ -8,7 +8,8 @@
     "lint": "eslint src tests",
     "prepare": "npm run build",
     "test": "ts-mocha --paths -p ./tsconfig.json tests/**/*.test.ts",
-    "test-watch": "npm test -- -w --watch-extensions ts"
+    "test-watch": "npm test -- -w --watch-extensions ts",
+    "test-server": "ts-node ./tests/test-server.ts"
   },
   "repository": {
     "type": "git",

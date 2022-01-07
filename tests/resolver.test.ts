@@ -1,24 +1,19 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import { TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+import { buildCatAppTestingModule } from './buildCatAppTestingModule';
 import { ortieCat, pogoCat, safiCat, silverCat } from './cat-module/cat-test-data';
-import { CatModule } from './cat-module/cat.module';
 import { CatsService } from './cat-module/cat.service';
-import { databaseModule, MongodInstance } from './database.module';
-import { graphqlModule } from './graphql.module';
+import { MongodInstance } from './database.module';
 // import { waitLong } from './helpers/waitLong';
-import { HomeCatModule } from './home-cat-module/home-cat.module';
 import { INTROSPECTION_QUERY, INTROSPECTION_QUERY_EXPECTED } from './introspection';
-import { StrayCatModule } from './stray-cat-module/stray-cat.module';
 
 describe('CatsResolver', () => {
   let app: INestApplication;
   let moduleRef: TestingModule;
 
   before(async () => {
-    moduleRef = await Test.createTestingModule({
-      imports: [databaseModule, graphqlModule, CatModule, HomeCatModule, StrayCatModule],
-    }).compile();
+    moduleRef = await buildCatAppTestingModule();
     app = moduleRef.createNestApplication();
     await app.init();
     await app.listen(1234);

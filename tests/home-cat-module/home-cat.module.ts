@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { catMongooseModule } from 'tests/cat-module/cat-mongoose.module';
+import { catMongooseModule } from '../cat-module/cat-mongoose.module';
 import { HomeCatsResolver } from './home-cat.resolver';
 import { HomeCatsService } from './home-cat.service';
 

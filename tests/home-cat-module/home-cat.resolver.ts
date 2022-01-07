@@ -1,5 +1,5 @@
 import { Resolver } from '@nestjs/graphql';
-import { BuildMongestRaResolver, MongestRaResolverOptions } from 'src/BuildMongestRaResolver';
+import { BuildMongestRaResolver, MongestRaResolverOptions } from '../../src/BuildMongestRaResolver';
 import { HomeCat } from './home-cat.entity';
 import { HomeCatsService } from './home-cat.service';
 
