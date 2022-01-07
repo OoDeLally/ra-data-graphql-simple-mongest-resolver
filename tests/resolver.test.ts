@@ -1,11 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
+import * as fs from 'fs';
+import * as path from 'path';
 import request from 'supertest';
 import { buildCatAppTestingModule } from './buildCatAppTestingModule';
 import { ortieCat, pogoCat, safiCat, silverCat } from './cat-module/cat-test-data';
 import { CatsService } from './cat-module/cat.service';
 import { MongodInstance } from './database.module';
-import { INTROSPECTION_QUERY, INTROSPECTION_QUERY_EXPECTED } from './introspection';
+import introspectionSnapshot from './introspection-snapshot.json';
+
+const introspectionQuery = fs
+  .readFileSync(path.join(__dirname, './introspection-query.gql'))
+  .toString();
 
 describe('CatsResolver', () => {
   let app: INestApplication;
@@ -33,9 +39,9 @@ describe('CatsResolver', () => {
     it('should return correct introspection data', async function () {
       return request(await app.getUrl())
         .post('/graphql')
-        .send({ query: INTROSPECTION_QUERY })
+        .send({ query: introspectionQuery })
         .expect(200)
-        .expect(INTROSPECTION_QUERY_EXPECTED);
+        .expect(introspectionSnapshot);
     });
   });
 });
