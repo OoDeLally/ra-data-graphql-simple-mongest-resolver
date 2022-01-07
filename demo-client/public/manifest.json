@@ -1,6 +1,6 @@
 {
-  "short_name": "LoL Trainer Admin",
-  "name": "LoL Trainer Administration dashboard",
+  "short_name": "Mongest Demo",
+  "name": "Mongest Demo",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
