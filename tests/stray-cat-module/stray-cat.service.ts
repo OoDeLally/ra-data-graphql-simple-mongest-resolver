@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MongestService } from 'src/MongestService';
+import { BuildMongestService } from 'mongest-service';
 import { StrayCat } from './stray-cat.entity';
 
 @Injectable()
-export class StrayCatsService extends MongestService(StrayCat) {}
+export class StrayCatsService extends BuildMongestService(StrayCat) {}

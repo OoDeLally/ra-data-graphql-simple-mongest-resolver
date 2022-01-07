@@ -61,6 +61,8 @@
   },
   "dependencies": {
     "@nestjs/graphql": "^9.1.2",
+    "apollo-server-core": "^3.6.1",
+    "apollo-server-express": "^3.6.1",
     "graphql": "^15.8.0",
     "mongest-service": "^0.1.0",
     "pluralize": "^8.0.0"
