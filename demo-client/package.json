@@ -1,0 +1,66 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.4.10",
+    "@material-ui/icons": "~4.11.2",
+    "autosuggest-highlight": "^3.1.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "classnames": "^2.3.1",
+    "graphql": "^15.5.2",
+    "html-entities": "^2.3.2",
+    "http-proxy-middleware": "^1.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "prop-types": "^15.7.2",
+    "ra-data-graphql-simple": "^3.13.2",
+    "ra-language-english": "^3.15.1",
+    "ra-ui-materialui": "^3.15.1",
+    "react": "^17.0.2",
+    "react-admin": "^3.17.2",
+    "react-dom": "^17.0.2",
+    "react-final-form": "^6.5.3",
+    "react-scripts": "4.0.3",
+    "string.prototype.matchall": "^4.0.4",
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.9"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start:dev": "yarn start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/string.prototype.matchall": "^4.0.0",
+    "@types/yup": "^0.29.11",
+    "prettier-plugin-organize-imports": "^2.0.0",
+    "react-app": "^1.1.2"
+  },
+  "proxy": "http://localhost:1234"
+}
