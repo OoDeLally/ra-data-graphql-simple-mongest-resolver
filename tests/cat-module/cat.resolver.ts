@@ -7,7 +7,7 @@ import { CatsService } from './cat.service';
 
 @InputType()
 class CatFilter {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   nameRegexp?: string;
 }
 
