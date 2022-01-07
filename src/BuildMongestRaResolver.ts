@@ -13,12 +13,10 @@ import {
   Field,
   ID,
   Info,
-  IntersectionType,
   Mutation,
   OmitType,
   Parent,
   PartialType,
-  PickType,
   Query,
   ResolveField,
   Resolver,
@@ -185,19 +183,15 @@ export function BuildMongestRaResolver<
       ? endpointOptions.create.args
       : DefaultCreateArgs;
 
-  const DefaultUpdateDocArgs = IntersectionType(
-    PartialType(
-      OmitType<any, any>(
-        entityClassRef,
-        (typeof endpointOptions.update?.args === 'object' &&
-          endpointOptions.update.args.omitFields && [
-            ...endpointOptions.update.args.omitFields,
-            'id',
-          ]) || ['id'],
-      ),
-      ArgsType,
+  const DefaultUpdateDocArgs = PartialType(
+    OmitType<any, any>(
+      entityClassRef,
+      (typeof endpointOptions.update?.args === 'object' &&
+        endpointOptions.update.args.omitFields && [
+          ...endpointOptions.update.args.omitFields,
+          'id',
+        ]) || ['id'],
     ),
-    PickType(entityClassRef, ['id'] as any, ArgsType),
     ArgsType,
   );
 
@@ -318,9 +312,10 @@ export function BuildMongestRaResolver<
     @InterceptorFromOptions(endpointOptions.update?.interceptor)
     async update(
       @Info() info: GraphQLResolveInfo,
-      @Args({ type: () => UpdateArgs }) doc: { id: IdType } & Partial<T>,
+      @Args('id', { type: () => ID }) id: IdType,
+      @Args({ type: () => UpdateArgs }) doc: Partial<T>,
     ): Promise<T> {
-      if (!doc.id) {
+      if (!id) {
         throw Error(`field 'id' missing in update's args: ${JSON.stringify(doc)}`);
       }
       const projection = getProjectionFromGraphQlInfo(
@@ -328,9 +323,9 @@ export function BuildMongestRaResolver<
         virtualFieldDeps,
         discriminatorRequiredFields,
       );
-      const newDoc = await this.service.findByIdAndUpdate(doc.id, doc, { new: true, projection });
+      const newDoc = await this.service.findByIdAndUpdate(id, doc, { new: true, projection });
       if (!newDoc) {
-        throw new NotFoundException(`Doc ${nameSingularForm} with id ${doc.id} not found`);
+        throw new NotFoundException(`Doc ${nameSingularForm} with id ${id} not found`);
       }
       return newDoc;
     }
