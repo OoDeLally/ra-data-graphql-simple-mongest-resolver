@@ -30,8 +30,11 @@ const CatsResolverOptions: MongestRaResolverOptions<Cat, CatFilter> = {
   },
   discriminatorRequiredExtraFields: ['age'],
   endpoints: {
-    create: {
-      enable: false,
+    update: {
+      enable: true,
+    },
+    delete: {
+      enable: true,
     },
   },
 };

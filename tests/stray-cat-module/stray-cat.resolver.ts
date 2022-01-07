@@ -3,7 +3,16 @@ import { BuildMongestRaResolver, MongestRaResolverOptions } from '../../src/Buil
 import { StrayCat } from './stray-cat.entity';
 import { StrayCatsService } from './stray-cat.service';
 
-const StrayCatsResolverOptions: MongestRaResolverOptions<StrayCat> = {};
+const StrayCatsResolverOptions: MongestRaResolverOptions<StrayCat> = {
+  endpoints: {
+    create: {
+      enable: true,
+    },
+    update: {
+      enable: true,
+    },
+  },
+};
 
 @Resolver(() => StrayCat)
 export class StrayCatsResolver extends BuildMongestRaResolver(StrayCat, StrayCatsResolverOptions) {

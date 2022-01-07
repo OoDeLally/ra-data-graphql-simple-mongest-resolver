@@ -297,7 +297,7 @@ export function BuildMongestRaResolver<
     }
 
     @DecorateIf(
-      endpointOptions.create?.enable ?? true,
+      endpointOptions.create?.enable ?? false,
       Mutation(() => entityClassRef, {
         name: `create${nameSingularForm}`,
       }),
