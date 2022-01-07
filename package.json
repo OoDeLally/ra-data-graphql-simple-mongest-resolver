@@ -1,6 +1,6 @@
 {
   "name": "ra-data-graphql-simple-mongest-resolver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mongest resolver for React Admin ra-data-graphql-simple",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
