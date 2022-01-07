@@ -34,8 +34,7 @@ import { EntityPayload, ItemOrArray, MongoDoc, NestGuardClassOrInstance } from '
 import { CustomFilter, FilterBuilder } from './CustomFilter';
 import { DecorateIf, NoopDecorator } from './decorators';
 import { getProjectionFromGraphQlInfo } from './getProjectionFromGraphQlInfo';
-import { RaPaginationArgs, raPaginationArgsToPaginationArgs } from './RaPaginationArgs';
-import { ListMetadata } from './ReactAdmin';
+import { ListMetadata, RaPaginationArgs, raPaginationArgsToPaginationArgs } from './pagination';
 
 interface ArgsOptions {
   // Omit field from the ArgsType payload.

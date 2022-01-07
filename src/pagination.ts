@@ -1,8 +1,19 @@
-import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
 import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
 import { SortDirection } from 'mongodb';
 import { EntityPayload } from 'src/types';
-import { RaSortOrder } from './ReactAdmin';
+
+@ObjectType()
+export class ListMetadata {
+  @Field(() => Int)
+  count!: number;
+
+  constructor(count: number) {
+    this.count = count;
+  }
+}
+
+export type RaSortOrder = 'ASC' | 'DESC';
 
 export interface IRaPaginationArgs<T> {
   page?: number;

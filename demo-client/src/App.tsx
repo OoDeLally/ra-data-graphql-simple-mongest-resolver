@@ -6,7 +6,9 @@ import React, { ReactElement, useMemo, useState } from 'react';
 import { Admin, DataProvider, Resource, TranslationMessages } from 'react-admin';
 import { buildDataProvider } from './dataProvider';
 import { CatEdit, CatList, CatShow } from './models/cats';
-import { CAT_NAME } from './resources';
+import { HomeCatCreate, HomeCatEdit, HomeCatList, HomeCatShow } from './models/home-cat';
+import { StrayCatCreate, StrayCatEdit, StrayCatList, StrayCatShow } from './models/stray-cat';
+import { CAT_NAME, HOME_CAT_NAME, STRAY_CAT_NAME } from './resources';
 
 const messagesPerLocal: Record<string, TranslationMessages> = {
   en: englishMessages,
@@ -48,6 +50,22 @@ const App = (): ReactElement | null => {
         show={CatShow}
         edit={CatEdit}
         options={{ label: 'All cats' }}
+      />
+      <Resource
+        name={STRAY_CAT_NAME}
+        list={StrayCatList}
+        show={StrayCatShow}
+        edit={StrayCatEdit}
+        create={StrayCatCreate}
+        options={{ label: 'Stray cats' }}
+      />
+      <Resource
+        name={HOME_CAT_NAME}
+        list={HomeCatList}
+        show={HomeCatShow}
+        edit={HomeCatEdit}
+        create={HomeCatCreate}
+        options={{ label: 'Home cats' }}
       />
     </Admin>
   );
