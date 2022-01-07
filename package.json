@@ -25,18 +25,6 @@
     "url": "https://github.com/OoDeLally/ra-data-graphql-simple-mongest-resolver/issues"
   },
   "homepage": "https://github.com/OoDeLally/ra-data-graphql-simple-mongest-resolver#readme",
-  "peerDependencies": {
-    "@nestjs/common": "^8.2.3",
-    "@nestjs/mongoose": "^9.0.1",
-    "mongodb": "^4.2.1",
-    "mongoose": "^6.1.5",
-    "@apollo/gateway": "^0.42.3",
-    "@nestjs/graphql": "^9.1.2",
-    "apollo-server-core": "^3.6.1",
-    "apollo-server-express": "^3.6.1",
-    "graphql": "^15.8.0",
-    "mongest-service": "^0.1.1"
-  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.16.0",
     "@babel/plugin-proposal-decorators": "^7.16.4",
@@ -73,5 +61,17 @@
   },
   "dependencies": {
     "pluralize": "^8.0.0"
+  },
+  "peerDependencies": {
+    "@apollo/gateway": "^0.29.0 || ^0.32.0 || ^0.33.0 || ^0.35.0 || ^0.38.0 || ^0.42.0",
+    "@nestjs/common": "^8.2.4",
+    "@nestjs/graphql": "^9.1.2",
+    "@nestjs/mongoose": "^9.0.2",
+    "apollo-server-core": "^3.0.0",
+    "apollo-server-express": "^3.1.2",
+    "graphql": "^15.5.1",
+    "mongest-service": "^0.1.1",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.5"
   }
 }
