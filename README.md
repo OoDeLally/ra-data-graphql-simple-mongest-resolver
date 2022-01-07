@@ -22,13 +22,13 @@ Clone this repo on your machine and follow the [demo instructions](https://githu
 Install (if not already there) the peer dependencies:
 
 ```bash
-npm install mongodb mongoose @nestjs/mongoose @apollo/gateway @nestjs/graphql apollo-server-core apollo-server-express graphql mongest-service
+npm install --save mongodb mongoose @nestjs/mongoose @apollo/gateway @nestjs/graphql apollo-server-core apollo-server-express graphql mongest-service
 ```
 
 Then install the `ra-data-graphql-simple-mongest-resolver` lib:
 
 ```bash
-npm install ra-data-graphql-simple-mongest-resolver
+npm install --save ra-data-graphql-simple-mongest-resolver
 ```
 
 Now you can create your entity, your service, and your resolver:
