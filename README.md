@@ -10,6 +10,11 @@ This is a BETA, and therefore you may encounter bugs. Please [post an issue](htt
 * Optimized: Uses mongo projections to only fetch the fields asked by the GraphQL query, no less, no more.
 * Fully customizable, overridable and expandable NestJS resolver.
 
+## Demo
+
+A cat-based demo of both backend and react-admin client is available.
+Clone this repo on your machine and follow the [demo instructions](https://github.com/OoDeLally/ra-data-graphql-simple-mongest-resolver/tree/master/demo-client).
+
 
 # Setup
 
