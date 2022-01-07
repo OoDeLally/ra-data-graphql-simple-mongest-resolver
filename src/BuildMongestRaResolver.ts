@@ -60,28 +60,26 @@ interface VirtualFieldOptions<T> {
 }
 
 export interface MongestRaResolverOptions<
-  T = any,
-  F extends CustomFilter | undefined = undefined,
+  T extends EntityPayload,
+  F extends CustomFilter = {},
   IdType = ObjectId,
 > {
   // Provide a filter in the graphql query endpoints
-  filter?: F extends undefined
-    ? never
-    : {
-        // Filter ObjectType class
-        classRef: Type<F>;
+  filter?: {
+    // Filter InputType class
+    classRef: Type<F>;
 
-        // Function converting your Filter to a mongo filter
-        filterBuilder: FilterBuilder<MongoDoc<T, IdType>, F extends undefined ? never : F>;
-      };
+    // Function converting your Filter to a mongo filter
+    filterBuilder: FilterBuilder<MongoDoc<T, IdType>, F>;
+  };
 
   // Virtual fields options e.g. @ResolveField(() => String)
-  virtualFields?: Record<string, VirtualFieldOptions<MongoDoc<T>>>;
+  virtualFields?: Record<string, VirtualFieldOptions<MongoDoc<T, IdType>>>;
 
   // Extra fields required for your graphql's resolveType().
   // They will always be included in the mongo projection.
   // Note: mongoose's discriminator is already implicitly added, you dont need to add it here.
-  discriminatorRequiredExtraFields?: (string & keyof MongoDoc<T>)[];
+  discriminatorRequiredExtraFields?: (string & keyof MongoDoc<T, IdType>)[];
 
   // Endpoint options.
   endpoints?: {
@@ -106,12 +104,10 @@ export type GetManyArgs<
   F extends object | undefined = undefined,
 > = RaPaginationArgs<T> & { filter?: F };
 
-export function BuildGetManyArgs<
-  T extends EntityPayload,
-  F extends CustomFilter | undefined,
-  IdType = ObjectId,
->(filter: MongestRaResolverOptions<T, F, IdType>['filter'] | undefined): Type<GetManyArgs<T, F>> {
-  const FilterClassRef = filter?.classRef;
+export function BuildGetManyArgs<T extends MongoDoc<EntityPayload, any>, F extends CustomFilter>(
+  filterOptions: MongestRaResolverOptions<T, F>['filter'] | undefined,
+): Type<GetManyArgs<T, F>> {
+  const FilterClassRef = filterOptions?.classRef;
 
   if (FilterClassRef) {
     @ArgsType()
@@ -147,7 +143,7 @@ function InterceptorFromOptions(
 
 export function BuildMongestRaResolver<
   T extends EntityPayload,
-  F extends CustomFilter | undefined,
+  F extends CustomFilter,
   Service extends MongestService<T, IdType>,
   IdType = ObjectId,
 >(
@@ -160,15 +156,18 @@ export function BuildMongestRaResolver<
     TypeMetadataStorage.getObjectTypeMetadataByTarget(entityClassRef)?.name || entityClassRef.name;
   const nameSingularForm = graphqlEntityName;
   const namePluralForm = pluralize(graphqlEntityName);
-  const virtualFieldOptions: Record<string, VirtualFieldOptions<MongoDoc<T>>> = {
+  const virtualFieldOptions: Record<string, VirtualFieldOptions<MongoDoc<T, IdType>>> = {
     ...options?.virtualFields,
-    id: options?.virtualFields?.id || { dependsOn: ['_id'] }, // This resolver has a builting ResolveField for id, but it could be overriden.
+    // This resolver has a builting ResolveField for id, but it could be overriden.
+    id: (options?.virtualFields?.id || { dependsOn: ['_id'] }) as VirtualFieldOptions<
+      MongoDoc<T, IdType>
+    >,
   };
   const virtualFieldDeps = mapValues(virtualFieldOptions, (val) => val.dependsOn || []);
   const discriminatorRequiredFields = options.discriminatorRequiredExtraFields || [];
 
   @ArgsType()
-  abstract class GetManyArgs extends BuildGetManyArgs<T, F, IdType>(options.filter) {}
+  abstract class GetManyArgs extends BuildGetManyArgs<MongoDoc<T, IdType>, F>(options.filter) {}
 
   const endpointOptions = options.endpoints || {};
 

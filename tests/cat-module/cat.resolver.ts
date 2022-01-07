@@ -1,9 +1,30 @@
-import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Field, InputType, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { escapeRegExp } from 'lodash';
+import { FilterQuery } from 'mongoose';
 import { BuildMongestRaResolver, MongestRaResolverOptions } from '../../src/BuildMongestRaResolver';
 import { Cat } from './cat.entity';
 import { CatsService } from './cat.service';
 
-const CatsResolverOptions: MongestRaResolverOptions<Cat> = {
+@InputType()
+class CatFilter {
+  @Field(() => String)
+  nameRegexp?: string;
+}
+
+const graphqlFilterToMongoFilter = async ({ nameRegexp }: CatFilter): Promise<FilterQuery<Cat>> => {
+  // The filter builder can be synchronous or asynchronous
+  const filter: FilterQuery<Cat> = {};
+  if (nameRegexp) {
+    filter.name = new RegExp(escapeRegExp(nameRegexp), 'i');
+  }
+  return filter;
+};
+
+const CatsResolverOptions: MongestRaResolverOptions<Cat, CatFilter> = {
+  filter: {
+    classRef: CatFilter,
+    filterBuilder: graphqlFilterToMongoFilter,
+  },
   virtualFields: {
     fancyName: { dependsOn: ['name'] },
   },

@@ -1,6 +1,6 @@
 import { FilterQuery } from 'mongoose';
 
-export type CustomFilter = Record<string, unknown>;
+export type CustomFilter = object;
 
 export type FilterBuilder<T, F extends CustomFilter> = (
   filter: F,

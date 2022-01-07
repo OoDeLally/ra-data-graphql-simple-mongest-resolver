@@ -1,4 +1,4 @@
-import { CanActivate } from '@nestjs/common';
+import { CanActivate, Type } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 
 export type EntityPayload = object;
@@ -16,12 +16,6 @@ export type ObjectIdHex = string;
 
 export type ItemOrArray<T> = T | T[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface Type<T = any> extends Function {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): T;
-}
-
 export type InstanceOrClass<T> = T | Type<T>;
 
 export type NestGuard = CanActivate;
@@ -29,3 +23,5 @@ export type NestGuard = CanActivate;
 export type NestGuardClassOrInstance = InstanceOrClass<NestGuard>;
 
 export type MongoDoc<T, ID = ObjectId> = T & { _id: ID };
+
+// export type CreatedType<T extends Type> = T extends Type<infer C> ? C : never;
