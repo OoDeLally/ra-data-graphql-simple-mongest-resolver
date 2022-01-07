@@ -5,7 +5,6 @@ import { buildCatAppTestingModule } from './buildCatAppTestingModule';
 import { ortieCat, pogoCat, safiCat, silverCat } from './cat-module/cat-test-data';
 import { CatsService } from './cat-module/cat.service';
 import { MongodInstance } from './database.module';
-// import { waitLong } from './helpers/waitLong';
 import { INTROSPECTION_QUERY, INTROSPECTION_QUERY_EXPECTED } from './introspection';
 
 describe('CatsResolver', () => {
@@ -32,7 +31,6 @@ describe('CatsResolver', () => {
 
   describe('Basic Resolver: Introspection', () => {
     it('should return correct introspection data', async function () {
-      // await waitLong(this);
       return request(await app.getUrl())
         .post('/graphql')
         .send({ query: INTROSPECTION_QUERY })

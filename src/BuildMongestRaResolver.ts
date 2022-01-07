@@ -254,6 +254,7 @@ export function BuildMongestRaResolver<
         ...(await GetManyArgsToFindManyOptions(args)),
         projection,
       };
+      // console.log('queryOptions', queryOptions);
       // console.log('projection', projection);
       // console.log('projection', projection);
       const docs = await this.service.find(mongoFilter, queryOptions);
