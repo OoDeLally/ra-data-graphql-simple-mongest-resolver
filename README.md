@@ -16,9 +16,7 @@ This is a BETA, and therefore you may encounter bugs. Please [post an issue](htt
 Install (if not already there) the peer dependencies:
 
 ```bash
-npm install @nestjs/mongoose
-npm install mongodb
-npm install mongoose
+npm install mongodb mongoose @nestjs/mongoose @apollo/gateway @nestjs/graphql apollo-server-core apollo-server-express graphql mongest-service
 ```
 
 Then install the `ra-data-graphql-simple-mongest-resolver` lib:
