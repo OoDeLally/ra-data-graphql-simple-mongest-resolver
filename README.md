@@ -46,7 +46,7 @@ registerEntityClassForSchema(Cat, CatSchema);
 
 
 @Injectable()
-export class CatsService extends MongestService(Cat) {
+export class CatsService extends BuildMongestService(Cat) {
   // Expandable service!
 }
 
