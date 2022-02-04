@@ -30,11 +30,11 @@ import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
 import { ObjectId } from 'mongodb';
 import { FilterQuery } from 'mongoose';
 import pluralize from 'pluralize';
-import { EntityPayload, ItemOrArray, MongoDoc, NestGuardClassOrInstance } from 'src/types';
 import { CustomFilter, FilterBuilder } from './CustomFilter';
 import { DecorateIf, NoopDecorator } from './decorators';
 import { getProjectionFromGraphQlInfo } from './getProjectionFromGraphQlInfo';
 import { ListMetadata, RaPaginationArgs, raPaginationArgsToPaginationArgs } from './pagination';
+import { EntityPayload, ItemOrArray, MongoDoc, NestGuardClassOrInstance } from './types';
 
 interface ArgsOptions {
   // Omit field from the ArgsType payload.

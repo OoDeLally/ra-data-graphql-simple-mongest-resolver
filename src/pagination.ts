@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
 import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
 import { SortDirection } from 'mongodb';
-import { EntityPayload } from 'src/types';
+import { EntityPayload } from './types';
 
 @ObjectType()
 export class ListMetadata {
