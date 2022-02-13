@@ -1,5 +1,6 @@
 import { Field, Int, InterfaceType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
 
 export enum CatKind {
   StrayCat = 'StrayCat',
@@ -22,6 +23,8 @@ const resolveType = (cat: Cat) => {
 @Schema({ discriminatorKey: 'kind' })
 @InterfaceType('Cat', { resolveType })
 export class Cat {
+  _id!: ObjectId;
+
   @Field(() => CatKind)
   kind!: CatKind;
 

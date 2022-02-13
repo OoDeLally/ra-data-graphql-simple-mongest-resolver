@@ -22,6 +22,4 @@ export type NestGuard = CanActivate;
 
 export type NestGuardClassOrInstance = InstanceOrClass<NestGuard>;
 
-export type MongoDoc<T, ID = ObjectId> = T & { _id: ID };
-
-// export type CreatedType<T extends Type> = T extends Type<infer C> ? C : never;
+export type ExtractIdType<E extends EntityPayload> = '_id' extends keyof E ? E['_id'] : ObjectId;

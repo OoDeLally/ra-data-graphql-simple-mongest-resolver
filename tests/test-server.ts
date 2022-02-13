@@ -1,10 +1,5 @@
 import { buildCatAppTestingModule } from './buildCatAppTestingModule';
-import {
-  ortieCatMongoDoc,
-  pogoCatMongoDoc,
-  safiCatMongoDoc,
-  silverCatMongoDoc,
-} from './cat-module/cat-test-data';
+import { ortieCat, pogoCat, safiCat, silverCat } from './cat-module/cat-test-data';
 import { CatsService } from './cat-module/cat.service';
 
 const PORT = 1234;
@@ -16,12 +11,7 @@ async function startTestServer() {
   await app.listen(PORT);
   const catService = moduleRef.get<CatsService>(CatsService);
   await catService.deleteMany({});
-  await catService.insertMany([
-    pogoCatMongoDoc,
-    safiCatMongoDoc,
-    ortieCatMongoDoc,
-    silverCatMongoDoc,
-  ]);
+  await catService.insertMany([pogoCat, safiCat, ortieCat, silverCat]);
 }
 
 startTestServer()

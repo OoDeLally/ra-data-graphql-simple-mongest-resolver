@@ -6,7 +6,7 @@ export const getProjectionFromGraphQlInfo = (
   info: GraphQLResolveInfo,
   virtualFieldDeps: Record<string, string[]>,
   discriminatorRequiredFields: string[],
-): MongoProjection<unknown> => {
+): MongoProjection => {
   // console.log("info", info);
   const fieldNodes = info.fieldNodes;
   if (fieldNodes.length !== 1) {

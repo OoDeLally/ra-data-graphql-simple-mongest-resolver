@@ -27,14 +27,13 @@ import { mapValues } from 'lodash';
 import { MongestService } from 'mongest-service';
 import { DocOrProjectedDoc } from 'mongest-service/dist/MongestService';
 import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
-import { ObjectId } from 'mongodb';
 import { FilterQuery } from 'mongoose';
 import pluralize from 'pluralize';
 import { CustomFilter, FilterBuilder } from './CustomFilter';
 import { DecorateIf, NoopDecorator } from './decorators';
 import { getProjectionFromGraphQlInfo } from './getProjectionFromGraphQlInfo';
 import { ListMetadata, RaPaginationArgs, raPaginationArgsToPaginationArgs } from './pagination';
-import { EntityPayload, ItemOrArray, MongoDoc, NestGuardClassOrInstance } from './types';
+import { EntityPayload, ExtractIdType, ItemOrArray, NestGuardClassOrInstance } from './types';
 
 interface ArgsOptions {
   // Omit field from the ArgsType payload.
@@ -56,27 +55,23 @@ interface VirtualFieldOptions<T> {
   dependsOn?: (string & keyof T)[];
 }
 
-export interface MongestRaResolverOptions<
-  T extends EntityPayload,
-  F extends CustomFilter = {},
-  IdType = ObjectId,
-> {
+export interface MongestRaResolverOptions<T extends EntityPayload, F extends CustomFilter = {}> {
   // Provide a filter in the graphql query endpoints
   filter?: {
     // Filter InputType class
     classRef: Type<F>;
 
     // Function converting your Filter to a mongo filter
-    filterBuilder: FilterBuilder<MongoDoc<T, IdType>, F>;
+    filterBuilder: FilterBuilder<T, F>;
   };
 
   // Virtual fields options e.g. @ResolveField(() => String)
-  virtualFields?: Record<string, VirtualFieldOptions<MongoDoc<T, IdType>>>;
+  virtualFields?: Record<string, VirtualFieldOptions<T>>;
 
   // Extra fields required for your graphql's resolveType().
   // They will always be included in the mongo projection.
   // Note: mongoose's discriminator is already implicitly added, you dont need to add it here.
-  discriminatorRequiredExtraFields?: (string & keyof MongoDoc<T, IdType>)[];
+  discriminatorRequiredExtraFields?: (string & keyof T)[];
 
   // Endpoint options.
   endpoints?: {
@@ -101,7 +96,7 @@ export type GetManyArgs<
   F extends object | undefined = undefined,
 > = RaPaginationArgs<T> & { filter?: F };
 
-export function BuildGetManyArgs<T extends MongoDoc<EntityPayload, any>, F extends CustomFilter>(
+export function BuildGetManyArgs<T extends EntityPayload, F extends CustomFilter>(
   filterOptions: MongestRaResolverOptions<T, F>['filter'] | undefined,
 ): Type<GetManyArgs<T, F>> {
   const FilterClassRef = filterOptions?.classRef;
@@ -141,30 +136,26 @@ function InterceptorFromOptions(
 export function BuildMongestRaResolver<
   T extends EntityPayload,
   F extends CustomFilter,
-  Service extends MongestService<T, IdType>,
-  IdType = ObjectId,
->(
-  entity: Type<T>,
-  options: MongestRaResolverOptions<T, F, IdType> = {},
-): Type<T & { service: Service }> {
+  Service extends MongestService<T>,
+>(entity: Type<T>, options: MongestRaResolverOptions<T, F> = {}): Type<T & { service: Service }> {
+  type IdType = ExtractIdType<T>;
+
   const filterBuilder = options.filter?.filterBuilder;
   const entityClassRef = entity;
   const graphqlEntityName =
     TypeMetadataStorage.getObjectTypeMetadataByTarget(entityClassRef)?.name || entityClassRef.name;
   const nameSingularForm = graphqlEntityName;
   const namePluralForm = pluralize(graphqlEntityName);
-  const virtualFieldOptions: Record<string, VirtualFieldOptions<MongoDoc<T, IdType>>> = {
+  const virtualFieldOptions: Record<string, VirtualFieldOptions<T>> = {
     ...options?.virtualFields,
     // This resolver has a builting ResolveField for id, but it could be overriden.
-    id: (options?.virtualFields?.id || { dependsOn: ['_id'] }) as VirtualFieldOptions<
-      MongoDoc<T, IdType>
-    >,
+    id: (options?.virtualFields?.id || { dependsOn: ['_id'] }) as VirtualFieldOptions<T>,
   };
   const virtualFieldDeps = mapValues(virtualFieldOptions, (val) => val.dependsOn || []);
   const discriminatorRequiredFields = options.discriminatorRequiredExtraFields || [];
 
   @ArgsType()
-  abstract class GetManyArgs extends BuildGetManyArgs<MongoDoc<T, IdType>, F>(options.filter) {}
+  abstract class GetManyArgs extends BuildGetManyArgs<T, F>(options.filter) {}
 
   const endpointOptions = options.endpoints || {};
 
@@ -199,7 +190,7 @@ export function BuildMongestRaResolver<
       ? endpointOptions.update.args
       : DefaultUpdateDocArgs;
 
-  const raFilterToMongoFilter = async (filter?: F): Promise<FilterQuery<MongoDoc<T, IdType>>> => {
+  const raFilterToMongoFilter = async (filter?: F): Promise<FilterQuery<T>> => {
     if (filterBuilder && filter) {
       return await filterBuilder(filter);
     } else {
@@ -213,7 +204,7 @@ export function BuildMongestRaResolver<
     if (!getManyArgs) {
       return undefined;
     }
-    return raPaginationArgsToPaginationArgs<MongoDoc<T, IdType>>(getManyArgs);
+    return raPaginationArgsToPaginationArgs<T>(getManyArgs);
   };
 
   @Resolver(() => entityClassRef, { isAbstract: true })
@@ -231,7 +222,7 @@ export function BuildMongestRaResolver<
     async getOne(
       @Info() info: GraphQLResolveInfo,
       @Args('id', { type: () => ID }) id: IdType,
-    ): Promise<DocOrProjectedDoc<MongoDoc<T, IdType>, any>> {
+    ): Promise<DocOrProjectedDoc<T, any>> {
       const projection = getProjectionFromGraphQlInfo(
         info,
         virtualFieldDeps,
@@ -241,7 +232,7 @@ export function BuildMongestRaResolver<
       if (!doc) {
         throw new NotFoundException();
       }
-      return doc;
+      return doc as DocOrProjectedDoc<T, any>;
     }
 
     @DecorateIf(
@@ -255,7 +246,7 @@ export function BuildMongestRaResolver<
     async getMany(
       @Info() info: GraphQLResolveInfo,
       @Args() args?: GetManyArgs,
-    ): Promise<DocOrProjectedDoc<MongoDoc<T, IdType>, any>[]> {
+    ): Promise<DocOrProjectedDoc<T, any>[]> {
       // console.log('info', JSON.stringify(info.fieldNodes[0]?.selectionSet, null, 2));
       const projection = getProjectionFromGraphQlInfo(
         info,
@@ -272,7 +263,7 @@ export function BuildMongestRaResolver<
       // console.log('projection', projection);
       const docs = await this.service.find(mongoFilter, queryOptions);
       // console.log('docs', docs);
-      return docs;
+      return docs as DocOrProjectedDoc<T, any>[];
     }
 
     @DecorateIf(
@@ -326,7 +317,7 @@ export function BuildMongestRaResolver<
       if (!newDoc) {
         throw new NotFoundException(`Doc ${nameSingularForm} with id ${id} not found`);
       }
-      return newDoc;
+      return newDoc as T;
     }
 
     @DecorateIf(

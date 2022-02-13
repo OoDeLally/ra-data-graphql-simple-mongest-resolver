@@ -36,6 +36,8 @@ Now you can create your entity, your service, and your resolver:
 ```ts
 @Schema()
 export class Cat {
+  _id!: ObjectId;
+
   @Field(() => String)
   @Prop({ required: true, type: String })
   name!: string;
