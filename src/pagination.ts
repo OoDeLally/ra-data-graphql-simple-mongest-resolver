@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
-import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
+import { FindManyDocsPaginationArgs } from 'mongest/dist/pagination';
 import { SortDirection } from 'mongodb';
 import { EntityPayload } from './types';
 

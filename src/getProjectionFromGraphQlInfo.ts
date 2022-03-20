@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo, SelectionNode } from 'graphql';
 import { chain, zipObject } from 'lodash';
-import { MongoProjection } from 'mongest-service';
+import { MongoProjection } from 'mongest';
 
 export const getProjectionFromGraphQlInfo = (
   info: GraphQLResolveInfo,

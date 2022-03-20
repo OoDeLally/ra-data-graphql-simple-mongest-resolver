@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BuildMongestService } from 'mongest-service';
+import { BuildMongestNestJsService } from 'mongest-nestjs-service';
 import { Cat } from './cat.entity';
 
 @Injectable()
-export class CatsService extends BuildMongestService(Cat) {}
+export class CatsService extends BuildMongestNestJsService(Cat) {}

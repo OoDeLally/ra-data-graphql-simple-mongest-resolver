@@ -24,9 +24,9 @@ import {
 } from '@nestjs/graphql';
 import { GraphQLResolveInfo } from 'graphql';
 import { mapValues } from 'lodash';
-import { MongestService } from 'mongest-service';
-import { DocOrProjectedDoc } from 'mongest-service/dist/MongestService';
-import { FindManyDocsPaginationArgs } from 'mongest-service/dist/pagination';
+import { MongestService } from 'mongest';
+import { DocOrProjectedDoc } from 'mongest/dist/MongestService';
+import { FindManyDocsPaginationArgs } from 'mongest/dist/pagination';
 import { FilterQuery } from 'mongoose';
 import pluralize from 'pluralize';
 import { CustomFilter, FilterBuilder } from './CustomFilter';
